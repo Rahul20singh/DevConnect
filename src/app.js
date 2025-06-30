@@ -1,6 +1,7 @@
 const express = require("express");
 
 const app = express();
+const {userAuth} = require("../middlewares/auth");
 
 app.use(express.json());
 
@@ -9,8 +10,26 @@ app.get("/", (req, res) => {
   res.send("Hello, World!");
 })
 
-app.get("/user", (req, res) => {
+
+app.get("/user", userAuth , (req, res, next) => {
+  console.log("This is a middleware function");   
+  res.json({ name: "Sara Doe", age: 30 });  
+});
+
+app.get("/user/data", (req, res) => {
   res.json({ name: "John Doe", age: 30 });  
+})
+
+//query paramters
+app.get("/test", (req, res) => {
+
+  res.json({ name: "mike Doe", age: 30, id: req.query });
+})
+
+//route paramaters
+
+app.get("/test/:id/:name", (req, res) => {
+  res.json({ name: req.params.name, age: 30, id: req.params.id });
 })
 
 
