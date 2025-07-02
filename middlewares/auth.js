@@ -20,7 +20,7 @@ async function userAuth(req, res, next){
    next()
    console.log("userrrrrrrr", user)
     } catch (error) {
-        res.status(400).send("user not found")
+        res.status(400).send("Please Login")
         
     }
 

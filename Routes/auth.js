@@ -3,7 +3,7 @@ const express = require("express")
 const authRouter = express.Router()
 const User = require("../models/user")
 const bcrypt = require("bcrypt")
-const validateData = require("../utils/validator")
+const {validateData} = require("../utils/validator")
 
 
 authRouter.post("/login", async (req, res) => {
@@ -22,7 +22,7 @@ authRouter.post("/login", async (req, res) => {
     }
 
     let token = await isUser.generateToken()
-    res.cookie("token", token)
+    res.cookie("token", token, {expiresIn: "1d"})
    
 
   
@@ -56,6 +56,13 @@ authRouter.post("/signup", async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 });
+
+authRouter.post("/logout", (req, res, next)=>{
+    // res.cokkie("token", null, {
+    //     expires: new Date(Date.now())
+    // })
+    res.clearCookie("token").send("Logout successful")
+})
 
 
 module.exports = authRouter;
