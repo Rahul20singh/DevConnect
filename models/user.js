@@ -61,11 +61,20 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: ["JavaScript", "React", "Node.js"],
     },
+    photoUrl: {
+      type: String,
+      default: "https://randomuser.me/api/portraits/men/75.jpg",
+      validate(value) {
+        if (!validator.isURL(value)) {
+          throw new Error("Invalid URL for photo");
+        }
+      },
+    },
   },
   { timestamps: true }
 );
 
-userSchema.index({"firstName": 1, "lastName": 1})
+userSchema.index({ firstName: 1, lastName: 1 });
 
 userSchema.methods.validatePassword = async function (password) {
   let isPasswordCorrect = await bcrypt.compare(password, this.password);

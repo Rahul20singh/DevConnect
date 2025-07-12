@@ -3,7 +3,7 @@ const User = require("../models/user");
 const ConnectionRequestModel = require("../models/connectionRequest");
 
 function validateData(userData) {
-  const { firstName, lastName, email, age, password } = userData;
+  const { firstName, lastName, email, age, password, photoUrl } = userData;
   console.log("Validating user data:", userData);
   if (!firstName || !lastName) {
     throw new Error("First name and last name are required");
@@ -22,7 +22,7 @@ function validateData(userData) {
 }
 
 function validateProfileEdit(data) {
-  let requiredFields = ["firstName", "lastName", "age"];
+  let requiredFields = ["firstName", "lastName", "age", "photoUrl"];
   let validField = Object.keys(data).every((key) =>
     requiredFields.includes(key)
   );
@@ -88,8 +88,6 @@ async function validateAndSaveRequestFields(data) {
 //     },
 //   ],
 // };
-
-
 
 module.exports = {
   validateData,
