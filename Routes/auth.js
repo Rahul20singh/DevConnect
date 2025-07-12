@@ -40,7 +40,7 @@ authRouter.post("/login", async (req, res) => {
     res.json({ message: "login successful", data: isUser });
   } catch (err) {
     console.error("Error logging user:", err);
-    return res.status(500).json({ error: err.message });
+    return res.status(500).json({ message: err.message });
   }
 });
 
