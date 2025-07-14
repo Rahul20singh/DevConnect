@@ -81,10 +81,9 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       _id: {
         $nin: Array.from(getUniqueConnectionIds),
       },
-    })
-      .select("firstName lastName, photoUrl age gender about")
-      .skip(skip)
-      .limit(limit);
+    }).select("firstName lastName, photoUrl age gender about");
+    // .skip(skip)
+    // .limit(limit);
 
     console.log("allUsers:::::::::::::: ", allUsers);
     res.json({ message: "all connection found", data: allUsers });

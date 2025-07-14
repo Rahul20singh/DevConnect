@@ -3,6 +3,20 @@ const User = require("../models/user");
 const ConnectionRequestModel = require("../models/connectionRequest");
 
 function validateData(userData) {
+  const allowedFields = [
+    "firstName",
+    "lastName",
+    "age",
+    "gender",
+    "email",
+    "password",
+    "photoUrl",
+  ];
+  Object.keys(userData).forEach((field) => {
+    if (!allowedFields.includes(field)) {
+      throw new Error("Extra fields are passed");
+    }
+  });
   const { firstName, lastName, email, age, password, photoUrl } = userData;
   console.log("Validating user data:", userData);
   if (!firstName || !lastName) {
@@ -22,7 +36,16 @@ function validateData(userData) {
 }
 
 function validateProfileEdit(data) {
-  let requiredFields = ["firstName", "lastName", "age", "photoUrl", "gender", "city", "skills", "about"];
+  let requiredFields = [
+    "firstName",
+    "lastName",
+    "age",
+    "photoUrl",
+    "gender",
+    "city",
+    "skills",
+    "about",
+  ];
   let validField = Object.keys(data).every((key) =>
     requiredFields.includes(key)
   );

@@ -4,16 +4,7 @@ const authRouter = express.Router();
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const { validateData } = require("../utils/validator");
-
-// authRouter.get("/test", (req, res) => {
-//   res.cookie("test", "123", {
-//     httpOnly: true,
-//     sameSite: "Lax",
-//     secure: false,
-//   });
-//   res.json({ message: "CORS test OK" });
-// });
-
+const secret_key = require("../utils/constants");
 
 authRouter.post("/login", async (req, res) => {
   console.log("Received login request:", req.body);
@@ -35,6 +26,7 @@ authRouter.post("/login", async (req, res) => {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.json({ message: "login successful", data: isUser });
@@ -48,20 +40,21 @@ authRouter.post("/signup", async (req, res) => {
   console.log("Received signup request:", req.body);
   const userData = req.body;
   try {
-    await validateData(userData);
-
+    validateData(userData);
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     let newUser = new User({
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      age: userData.age,
-      email: userData.email,
+      ...userData,
       password: hashedPassword,
-      photoUrl: userData.photoUrl
     });
-
-    await newUser.save();
-    res.send("User created successfully");
+    let updatedUser = await newUser.save();
+    let token = await newUser.generateToken();
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+    res.json({ message: "User created successfully", data: updatedUser });
   } catch (err) {
     console.error("Error creating user:", err);
     return res.status(500).json({ error: err.message });

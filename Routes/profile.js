@@ -17,17 +17,6 @@ profileRouter.get("/profile", userAuth, async (req, res) => {
   }
 });
 
-// profileRouter.get("/feed", userAuth,  async(req, res) => {
-//   try{
-//     let allUsers = await User.find();
-//     console.log("Fetched users:", allUsers);
-//     res.json(allUsers);
-//   }
-//   catch(err) {
-//     console.error("Error fetching profile:", err);
-//     return res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
 
 profileRouter.post("/profile/edit", userAuth, async (req, res, next) => {
   try {
