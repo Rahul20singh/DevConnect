@@ -15,7 +15,7 @@ requestRouter.post(
     let fromUserId = req.params.fromUserId;
     try {
       await validateAndSaveRequestFields({ status, toUserId, fromUserId });
-      res.send("Connection request sent");
+      res.status(200).send("Connection request sent");
     } catch (error) {
       res.status(400).send("Eror::::::" + error.message);
     }
@@ -26,9 +26,9 @@ requestRouter.post(
   "/request/review/:status/:requestId",
   userAuth,
   async (req, res, next) => {
-
     let status = req.params.status;
     let requestId = req.params.requestId;
+    console.log("requestId:::::::::::::::", requestId);
     let fromUserId = req.user._id;
     try {
       let allowedStatus = ["accepted", "rejected"];
@@ -39,15 +39,18 @@ requestRouter.post(
       let isRequestPresent = await ConnectionRequestModel.findOne({
         _id: requestId,
         fromUserId: fromUserId,
-        "status": "intersted"
+        status: "intersted",
       });
 
       if (!isRequestPresent) {
         throw new Error("connection is not found");
       }
-      isRequestPresent['status'] = status;
-      let updatedRequest = await isRequestPresent.save()
-      res.json({"message": `request is updated to status ${status}`, "result": updatedRequest})
+      isRequestPresent["status"] = status;
+      let updatedRequest = await isRequestPresent.save();
+      res.json({
+        message: `request is updated to status ${status}`,
+        result: updatedRequest,
+      });
     } catch (error) {
       res.status(400).send("Eror::::::" + error.message);
     }

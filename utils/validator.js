@@ -22,7 +22,7 @@ function validateData(userData) {
 }
 
 function validateProfileEdit(data) {
-  let requiredFields = ["firstName", "lastName", "age", "photoUrl"];
+  let requiredFields = ["firstName", "lastName", "age", "photoUrl", "gender", "city", "skills", "about"];
   let validField = Object.keys(data).every((key) =>
     requiredFields.includes(key)
   );
